@@ -1,0 +1,92 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2706
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Monaco;}
+{\colortbl;\red255\green255\blue255;\red22\green21\blue22;\red22\green21\blue22;\red22\green21\blue22;
+\red22\green21\blue22;}
+{\*\expandedcolortbl;;\cssrgb\c11373\c10980\c11373;\cssrgb\c11373\c10980\c11373\c3922;\cssrgb\c11373\c10980\c11373;
+\cssrgb\c11373\c10980\c11373\c3922;}
+\margl1440\margr1440\vieww28600\viewh15160\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs24 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \
+LOAD CSV With HEADERS FROM 'file:///\cf4 \cb5 \outl0\strokewidth0 Police\cf2 \cb3 \outl0\strokewidth0 \strokec2 .csv' AS row\
+   MATCH (i:Incident \{i:row.`Incident No with Year`, i:row.`Year of Incident`, i:row.`Service Number ID`, i:row.`Watch`, i:row.`Incident Problem`, i:row.`Type of Incident`\})\
+   MATCH (\cf4 \cb5 \outl0\strokewidth0 d:Date\{d:row.`Date1 of Occurrence`, d:row.`Year1 of Occurrence`, d:row.`Month1 of Occurence`, d:row.`Day1 of the Week`, d:row.`Time1 of Occurrence`, d:row.`Day1 of the Year`, d:row.`Date2 of Occurrence`, d:row.`Year2 of Occurrence`, d:row.`Month2 of Occurence`, d:row.`Day2 of the Week`, d:row.`Time2 of Occurrence`, d:row.`Day2 of the Year`, d:row.`Date of Report`, d:row.`Date incident created`\}\cf2 \cb3 \outl0\strokewidth0 \strokec2 )\
+   MERGE (i)-[:\cf4 \cb5 \outl0\strokewidth0 occured_\cf2 \cb3 \outl0\strokewidth0 \strokec2 on]->(d);\
+\
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb5 \outl0\strokewidth0 LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (i:Incident \{i:row.`Incident No with Year`, i:row.`Year of Incident`, i:row.`Service Number ID`, i:row.`Watch`, i:row.`Incident Problem`, i:row.`Type of Incident`\})\
+   MATCH (l:Location\{l:row.`Type  Location`, l:row.`Type of Property`, l:row.`Incident Address`, l:row.`Apartment Number`, l:row.`Reporting Area`, l:row.`Beat`, l:row.`Division`, l:row.`Sector`, l:row.`Council District`, l:row.`Target Area Action Grids`, l:row.`Community`, l:row.`X Coordinate`, l:row.`Y Cordinate`, l:row.`Zip Code`, l:row.`City`, l:row.`State`, l:row.`Location` \})\
+   MERGE (i)-[:located_at]->(l);\
+\
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb5 LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (i:Incident \{i:row.`Incident No with Year`, i:row.`Year of Incident`, i:row.`Service Number ID`, i:row.`Watch`, i:row.`Incident Problem`, i:row.`Type of Incident`\})\
+   MATCH (\cf4 \cb5 c:IncidentCall\{c:row.`CFS Number`, c:row.`Call Received Date Time`, c:row.`Call Date Time`, c:row.`Call Cleared Date Time`, c:row.`Call Dispatch Date Time`, c:row.`Person Involvement Type`\})\cf4 \cb5 \
+   MERGE (i)-[:creates]->(c);\cf4 \cb5 \
+\cf4 \cb5 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \cb3 \outl0\strokewidth0 \strokec2 LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (i:Incident \{i:row.`Incident No with Year`, i:row.`Year of Incident`, i:row.`Service Number ID`, i:row.`Watch`, i:row.`Incident Problem`, i:row.`Type of Incident`\})\
+   MATCH (v:Victim \{v:row.`Victim Type`, v:row.`Victim Race`, v:row.`Victim Ethnicity`, v:row.`Victim Gender`\})\
+   MERGE (i)-[:on]->(v);\
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb5 \outl0\strokewidth0 \
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (i:Incident \{i:row.`Incident No with Year`, i:row.`Year of Incident`, i:row.`Service Number ID`, i:row.`Watch`, i:row.`Incident Problem`, i:row.`Type of Incident`\})\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MERGE (i)-[:recorded_as]->(o);\
+\
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb5 LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (\cf4 \cb5 o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\}\cf4 \cb5 )\
+   MATCH (\cf4 \cb5 n:nibrs\{n:row.`NIBRS Crime`, n:row.`NIBRS Crime Category`, n:row.`NIBRS Crime Against`, n:row.`NIBRS Code`, n:row.`NIBRS Group`, n:row.`NIBRS Type`\}\cf4 \cb5 )\
+   MERGE (o)-[:reported_in]->(n);\
+\
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (\cf4 \cb5 od:OffenseDate\{od:row.`Offense Entered Year`, od:row.`Offense Entered Month`, od:row.`Offense Entered Day of the Week`, od:row.`Offense Entered Time`, od:row.`Offense Entered DateTime`\}\cf4 \cb5 )\
+   MERGE (o)-[:recorded_in]->(od);\cf4 \cb5 \
+\cf4 \cb5 \
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (\cf4 \cb5 og:GangOffense\{of:row.`Gang Related Offense`\}\cf4 \cb5 )\
+   MERGE (o)-[:is]->(og);\
+\
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (\cf4 \cb5 od:DrugOffense\{od:row.`Drug Related`\}\cf4 \cb5 )\
+   MERGE (o)-[:is]->(od);\cf4 \cb5 \
+	\cf4 \cb5 \
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (\cf4 \cb5 of:FamilyOffense\{of:row.`Family Offense`\}\cf4 \cb5 )\
+   MERGE (o)-[:is]->(of);\
+\
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (\cf4 \cb5 ot:offenseType\{os:row.`Offense Type`\}\cf4 \cb5 )\
+   MERGE (o)-[:is]->(ot);\cf2 \cb3 \outl0\strokewidth0 \strokec2 \
+\cf4 \cb5 \outl0\strokewidth0 \
+\
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (os:offenseStatus\{os:row.`Offense Status`\})\
+   MERGE (o)-[:is]->(os);\
+\
+\
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (u:Ucr\{u:row.`UCR Offense Name`, u:row.`UCR Offense Description`, u:row.`UCR Code`, u:row.`UCR Disposition`\})\
+   MERGE (o)-[:registered_in]->(u);\cf2 \cb3 \outl0\strokewidth0 \strokec2 \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\pard\pardeftab720\partightenfactor0
+\cf4 \cb5 \outl0\strokewidth0 \
+\
+LOAD CSV With HEADERS FROM 'file:///Police.csv' AS row\
+   MATCH (o:Offense\{o:row.`Offense Code`, o:row.`Offense Description`, o:row.`Criminal Justice Information Service Code`, o:row.`Weapon Used`, o:row.`Penal Code`, o:row.`Investigating Unit 1`, o:row.`Investigating Unit 2`\})\
+   MATCH (oh:HateOffense\{oh:row.`Hate Crime Description`\})\
+   MERGE (o)-[:is]->(oh);}
