@@ -8,6 +8,7 @@ The goal of this project was to analyze a large dataset of Dallas Police inciden
 
 
 Task:
+
 Data profiling and Cleaning: First, I needed to profile the data to understand its characteristics and identify any potential issues. I utilized Python and a library called "ydata-profiling" to conduct data profiling. This library generates a very detailed report and it shows the total number of rows, columns, missing values, duplicates, size of dataset and data type of columns. It also shows details about each column like missing values, distinct values and memory size. This involved examining data quality, statistics, and the overall structure of the dataset. Cleaned the dataset using python. Renamed the columns according to the business requirements. Handled null, missing values, inconsistencies in the data. Date format. 
 Used pandas functions like rename, is null.sum, duplicated, replace, fillna, to date time etc
 
